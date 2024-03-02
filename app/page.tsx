@@ -8,12 +8,17 @@ import { useForm } from "react-hook-form";
 import { ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-canvas";
 import image from "next/image";
 import { useRef } from "react";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const canvasRef = useRef<ReactSketchCanvasRef>(null);
 
   const saveSketchMutation = useMutation(api.sketches.saveSketch);
   const sketchesQuery = useQuery(api.sketches.getSketches);
+
+  const sortedSketches = (sketchesQuery ?? []).sort((a, b) => {
+    return b._creationTime - a._creationTime;
+  });
 
   const {
     register,
@@ -29,6 +34,8 @@ export default function Home() {
         <form
           className="flex flex-col gap-2 w-1/4"
           onSubmit={handleSubmit(async (formData) => {
+            if (!canvasRef.current) return;
+            const image = await canvasRef.current.exportImage("jpeg");
             await saveSketchMutation({ ...formData, image });
           })}
         >
@@ -43,13 +50,13 @@ export default function Home() {
             strokeWidth={4}
             strokeColor="black"
           />
-          <input type="submit" />
+          <Button type="submit">Submit</Button>
         </form>
 
         <section>
           <h2>Recent Sketches</h2>
           <div className="grid grid-cols-4 gap-4">
-            {sketchesQuery?.map((sketch) => (
+            {sortedSketches?.map((sketch) => (
               <Image
                 key={sketch._id}
                 width="256"
