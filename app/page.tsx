@@ -1,12 +1,13 @@
 "use client";
 
+import Image from "next/image";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { api } from "@/convex/_generated/api";
 import { useMutation, useQuery } from "convex/react";
 import { useForm } from "react-hook-form";
 import { ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-canvas";
-import image from "next/image";
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 
