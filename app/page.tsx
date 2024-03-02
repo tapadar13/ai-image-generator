@@ -4,11 +4,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { api } from "@/convex/_generated/api";
 import { useMutation, useQuery } from "convex/react";
-import Image from "next/image";
-import image from "next/image";
 import { useForm } from "react-hook-form";
+import { ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-canvas";
+import image from "next/image";
+import { useRef } from "react";
 
 export default function Home() {
+  const canvasRef = useRef<ReactSketchCanvasRef>(null);
+
   const saveSketchMutation = useMutation(api.sketches.saveSketch);
   const sketchesQuery = useQuery(api.sketches.getSketches);
 
@@ -32,6 +35,14 @@ export default function Home() {
           <Label htmlFor="prompt">Prompt</Label>
           <Input id="prompt" {...register("prompt", { required: true })} />
           {errors.prompt && <span>This field is required</span>}
+
+          <Label className="mt-4">Canvas (Draw something below)</Label>
+          <ReactSketchCanvas
+            ref={canvasRef}
+            style={{ width: 256, height: 256 }}
+            strokeWidth={4}
+            strokeColor="black"
+          />
           <input type="submit" />
         </form>
 
