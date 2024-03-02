@@ -47,11 +47,20 @@ export default function Home() {
           <Label className="mt-4">Canvas (Draw something below)</Label>
           <ReactSketchCanvas
             ref={canvasRef}
-            style={{ width: 256, height: 256 }}
+            style={{ width: "256", height: "256" }}
             strokeWidth={4}
             strokeColor="black"
           />
           <Button type="submit">Submit</Button>
+          <Button
+            type="button"
+            variant={"ghost"}
+            onClick={() => {
+              canvasRef.current?.clearCanvas();
+            }}
+          >
+            Clear
+          </Button>
         </form>
 
         <section>
@@ -62,7 +71,7 @@ export default function Home() {
                 key={sketch._id}
                 width="256"
                 height="256"
-                src={sketch.result}
+                src={sketch?.result}
                 alt="sketch"
               />
             ))}
